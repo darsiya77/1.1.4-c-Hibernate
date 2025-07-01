@@ -4,12 +4,9 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -21,14 +18,21 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        try (var connection = Util.getConnection(); var statement = connection.createStatement()) {
 
-            statement.executeUpdate("""
-            CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, 
-            name VARCHAR(50) NOT NULL,lastName  VARCHAR(50) NOT NULL, age INT)""");
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
+
+            session.beginTransaction();                    // открываем транзакцию
+
+            session.createNativeQuery("""
+                    CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, 
+                    name VARCHAR(50) NOT NULL,lastName  VARCHAR(50) NOT NULL, age INT)""").executeUpdate();
+
+            session.getTransaction().commit();             // закрываем транзакцию
 
             System.out.println("Таблица users создана успешно");
-        } catch (SQLException e) {
+
+        } catch (HibernateException e) {
+
             e.printStackTrace();
         }
 
@@ -36,44 +40,58 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        try (var connection = Util.getConnection(); var statement = connection.createStatement()) {
-            statement.executeUpdate("DROP TABLE IF EXISTS users");
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
+
+            session.beginTransaction();
+
+            session.createNativeQuery("DROP TABLE IF EXISTS users").executeUpdate();
+
+            session.getTransaction().commit();
+
             System.out.println("Таблица users успешно удалена");
 
-        } catch (SQLException e) {
+        } catch (HibernateException e) {
+
             e.printStackTrace();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session;
-        try (SessionFactory factory = Util.getSessionFactory()) {
 
-            User user = new User(name, lastName, age);
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
 
-            session = factory.getCurrentSession();
+            session.beginTransaction();                    // открываем транзакцию
 
-            session.beginTransaction();                // открываем транзакцию
-            session.save(user);                        // инсертим объект в базу
-            session.getTransaction().commit();         // закрываем транзакцию
+            session.save(new User(name, lastName, age));   // инсертим объект в базу
+
+            session.getTransaction().commit();             // закрываем транзакцию
+
+            System.out.println("User с именем – " + name + " добавлен в базу данных");
+
+        } catch (HibernateException e) {
+
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session;
-        try (SessionFactory factory = Util.getSessionFactory()) {
-
-            session = factory.getCurrentSession();
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
 
             session.beginTransaction();  // открываем транзакцию
 
-            User user =  session.get(User.class, id);
+            User user = session.get(User.class, id);
 
             session.delete(user);
 
             session.getTransaction().commit(); // закрываем транзакцию
+
+            System.out.println("User удален");
+
+        } catch (HibernateException e) {
+
+            e.printStackTrace();
         }
     }
 
@@ -82,16 +100,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
         List<User> usersList;
 
-        Session session;
-        try (SessionFactory factory = Util.getSessionFactory()) {
-
-            session = factory.getCurrentSession();
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
 
             session.beginTransaction();  // открываем транзакцию
 
             usersList = session.createQuery("from User").getResultList(); // выполняем HQL-код
 
             session.getTransaction().commit(); // закрываем транзакцию
+
+        } catch (HibernateException e) {
+
+            throw new RuntimeException(e);
         }
 
         return usersList;
@@ -99,16 +118,19 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Session session;
-        try (SessionFactory factory = Util.getSessionFactory()) {
-
-            session = factory.getCurrentSession();
+        try (Session session = Util.getSessionFactory().getCurrentSession()) {
 
             session.beginTransaction();  // открываем транзакцию
 
             session.createQuery("delete User").executeUpdate();
 
             session.getTransaction().commit(); // закрываем транзакцию
+
+            System.out.println("Таблица очищена");
+
+        } catch (HibernateException e) {
+
+            e.printStackTrace();
         }
     }
 }

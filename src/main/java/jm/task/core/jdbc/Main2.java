@@ -41,7 +41,7 @@ public class Main2 {
             User user = new User("AAAA", "SSSS", (byte) 48);
 
             session.beginTransaction();        // открываем транзакцию
-            session.save(user);                // инсертим объект ы базу
+            session.save(user);                // инсертим объект в базу
 //            session.getTransaction().commit(); // закрываем транзакцию
 
 //            long myId = user.getId();

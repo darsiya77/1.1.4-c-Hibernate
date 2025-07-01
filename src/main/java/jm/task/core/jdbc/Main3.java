@@ -48,8 +48,6 @@ public class Main3 {
 
             session.getTransaction().commit();
 
-            
-
         }
     }
 }

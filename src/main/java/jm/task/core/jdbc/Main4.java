@@ -23,7 +23,7 @@ public class Main4 {
 
             session = factory.getCurrentSession();
 
-            User user = new User("Andrey", "Fomin", (byte) 30);
+            User user = new User("Alexey", "Parhomenko", (byte) 42);
 
             session.beginTransaction();        // открываем транзакцию
             session.save(user);                // инсертим объект в базу
