@@ -48,10 +48,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void saveUser(String name, String lastName, byte age) {
         Session session;
-        try (SessionFactory factory = new Configuration()  // Создаем 1 раз и переиспользуем, SessionFactory - всегда надо закрывать!
-                .configure("hibernate.cfg.xml")  // resources/hibernate.cfg.xml
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory()) {
+        try (SessionFactory factory = Util.getSessionFactory()) {
 
             User user = new User(name, lastName, age);
 
@@ -66,10 +63,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
         Session session;
-        try (SessionFactory factory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory()) {
+        try (SessionFactory factory = Util.getSessionFactory()) {
 
             session = factory.getCurrentSession();
 
@@ -89,10 +83,7 @@ public class UserDaoHibernateImpl implements UserDao {
         List<User> usersList;
 
         Session session;
-        try (SessionFactory factory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory()) {
+        try (SessionFactory factory = Util.getSessionFactory()) {
 
             session = factory.getCurrentSession();
 
@@ -109,10 +100,7 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         Session session;
-        try (SessionFactory factory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory()) {
+        try (SessionFactory factory = Util.getSessionFactory()) {
 
             session = factory.getCurrentSession();
 
