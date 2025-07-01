@@ -11,9 +11,4 @@ git reset head^     # Возвращает проект к указанному коммиту, при этом переводит
                       зону. head^ - предыдущий head
 git remote -v
 git remote remove PP01
-git remote dd PP01 git@github.com:darsiya77/Darsiya77.git
-git branch AddHibernateInPriject  # Добавление ветки AddHibernateInPriject
-git branch                        # Показывает текущую ветку, на которой находимся
-git branch -d название вктки      # Удалить соответсвующую ветку
-git checkout название ветки       # Переключиться на ветку с указанным названием
-git merge название ветки          # слияние указанной ветки с главной веткой master/main
+git remote add PP01 git@github.com:darsiya77/Darsiya77.git

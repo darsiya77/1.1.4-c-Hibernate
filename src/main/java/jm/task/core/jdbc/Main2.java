@@ -1,13 +1,13 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserService;
-import jm.task.core.jdbc.service.UserServiceImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class Main {
+import java.util.List;
+
+public class Main2 {
 
     public static void main(String[] args) {
 
@@ -38,14 +38,19 @@ public class Main {
 
             session = factory.getCurrentSession();
 
-            User user = new User("AAAA", "NNNN", (byte) 10);
+            User user = new User("AAAA", "SSSS", (byte) 48);
 
             session.beginTransaction();        // открываем транзакцию
-            session.save(user);                // инсертим объект в базу
-            session.getTransaction().commit(); // закрываем транзакцию
+            session.save(user);                // инсертим объект ы базу
+//            session.getTransaction().commit(); // закрываем транзакцию
 
-            System.out.println(user);
+//            long myId = user.getId();
+            User us =  session.get(User.class, user.getId());
+//            List<User> users = session.createQuery("from users").list();
+            session.getTransaction().commit();
+            System.out.println(us);
 
+            
 
         }
     }

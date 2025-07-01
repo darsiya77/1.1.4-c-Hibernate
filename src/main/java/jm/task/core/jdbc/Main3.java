@@ -1,13 +1,15 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserService;
-import jm.task.core.jdbc.service.UserServiceImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class Main {
+import java.util.List;
+
+// https://youtu.be/1yvajv4ywk0?si=xnRL_vTqky4BUvxJ&t=728
+
+public class Main3 {
 
     public static void main(String[] args) {
 
@@ -38,14 +40,15 @@ public class Main {
 
             session = factory.getCurrentSession();
 
-            User user = new User("AAAA", "NNNN", (byte) 10);
-
             session.beginTransaction();        // открываем транзакцию
-            session.save(user);                // инсертим объект в базу
-            session.getTransaction().commit(); // закрываем транзакцию
 
-            System.out.println(user);
+            List<User> usersList = session.createQuery("from User where userAge > 18 AND name LIKE 'n%' ", User.class).getResultList();  // HQL-код
 
+            usersList.forEach(System.out::println);
+
+            session.getTransaction().commit();
+
+            
 
         }
     }

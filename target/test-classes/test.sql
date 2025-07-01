@@ -1,5 +1,5 @@
 #insert into users(name, age, last_name) values('Andrey', 35, 'Troyan');
-# select * from users;
+select * from users;
 #select * from users where name = 'Steve';
 # update users set name = 'Jenya', age = 25 where id = 1
 # delete from users where id = 4;

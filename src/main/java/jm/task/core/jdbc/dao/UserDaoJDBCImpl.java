@@ -2,7 +2,6 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setId(rs.getLong("id"));
                 user.setName(rs.getString("name"));
                 user.setLastName(rs.getString("lastName"));
-                user.setAge(rs.getByte("age"));
+                user.setUserAge(rs.getByte("age"));
                 users.add(user);
             }
         } catch (SQLException e) {

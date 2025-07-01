@@ -1,23 +1,26 @@
 package jm.task.core.jdbc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+// https://youtu.be/cL92VZ3FcxA?si=HPCPMLvlCEMJH6Pf&t=245
+
+import javax.persistence.*;
 import java.util.Objects;
 
-@Table
+@Entity
+@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "lastName")
     private String lastName;
 
-    @Column
-    private Byte age;
+    @Column(name = "age")
+    private Byte userAge;
 
     public User() {
 
@@ -26,7 +29,7 @@ public class User {
     public User(String name, String lastName, Byte age) {
         this.name = name;
         this.lastName = lastName;
-        this.age = age;
+        this.userAge = age;
     }
 
     public Long getId() {
@@ -53,12 +56,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Byte getAge() {
-        return age;
+    public Byte getUserAge() {
+        return userAge;
     }
 
-    public void setAge(Byte age) {
-        this.age = age;
+    public void setUserAge(Byte userAge) {
+        this.userAge = userAge;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class User {
                "id = " + id +
                ", name = '" + name + '\'' +
                ", lastName = '" + lastName + '\'' +
-               ", age = " + age +
+               ", userAge = " + userAge +
                '}' + "\n";
     }
 
@@ -75,11 +78,11 @@ public class User {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age);
+        return Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(userAge, user.userAge);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, lastName, age);
+        return Objects.hash(name, lastName, userAge);
     }
 }
